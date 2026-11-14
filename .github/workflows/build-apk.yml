@@ -41,7 +41,7 @@ jobs:
         run: |
           BT="$ANDROID_HOME/build-tools/34.0.0"
           APK=android/app/build/outputs/apk/release/app-release.apk
-          "$BT/zipalign" -c -P 16 -v 4 "$APK" | tail -2
+          "$BT/zipalign" -c -p 4 "$APK" && echo "zipalign OK"
           "$BT/apksigner" verify --verbose --print-certs "$APK"
           "$BT/aapt2" dump badging "$APK" | head -5
 

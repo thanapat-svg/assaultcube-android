@@ -890,6 +890,15 @@ void checkinput()
             case SDL_QUIT:
                 quit();
                 break;
+#ifdef __ANDROID__
+            // The GL context does not survive going to the background reliably (black screen on return),
+            // so save settings and exit cleanly; tapping the icon again starts a fresh game.
+            case SDL_APP_WILLENTERBACKGROUND:
+            case SDL_APP_TERMINATING:
+                clientlogf("android: app is going to the background, saving and exiting");
+                quit();
+                break;
+#endif
 
             case SDL_KEYDOWN:
                 if(bootstrapentropy > 0 && (--bootstrapentropy & 2)) mapscreenshot(NULL, false, -1, 1000.0f / (1000 + rnd(400)), 0, 0);
@@ -1234,6 +1243,7 @@ void sanitychecks()
 #define DEFAULTPROFILEPATH "profile"
 
 #ifdef __ANDROID__
+extern "C" void ac_flushlog() { if(clientlogfile) clientlogfile->fflush(); }
 int ac_main(int argc, char **argv)
 #else
 int main(int argc, char **argv)
@@ -1380,6 +1390,7 @@ int main(int argc, char **argv)
 #ifdef __ANDROID__
     SDL_SetHint(SDL_HINT_ORIENTATIONS, "LandscapeLeft LandscapeRight");
     SDL_SetHint(SDL_HINT_ANDROID_TRAP_BACK_BUTTON, "1");
+    SDL_SetHint(SDL_HINT_ANDROID_BLOCK_ON_PAUSE, "0");
 #endif
     if(SDL_Init(SDL_INIT_TIMER|SDL_INIT_VIDEO|par)<0) fatal("Unable to initialize SDL");
     SDL_version sdlver;
