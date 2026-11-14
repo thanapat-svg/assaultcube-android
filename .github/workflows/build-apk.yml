@@ -37,6 +37,14 @@ jobs:
         working-directory: android
         run: ./gradlew --no-daemon assembleRelease
 
+      - name: Verify APK
+        run: |
+          BT="$ANDROID_HOME/build-tools/34.0.0"
+          APK=android/app/build/outputs/apk/release/app-release.apk
+          "$BT/zipalign" -c -P 16 -v 4 "$APK" | tail -2
+          "$BT/apksigner" verify --verbose --print-certs "$APK"
+          "$BT/aapt2" dump badging "$APK" | head -5
+
       - name: Rename APK
         run: |
           mkdir -p out

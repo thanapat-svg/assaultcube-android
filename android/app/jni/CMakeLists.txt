@@ -7,6 +7,8 @@ get_filename_component(ACROOT ${CMAKE_CURRENT_SOURCE_DIR}/../../.. ABSOLUTE)
 set(ACSRC ${ACROOT}/source/src)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+# 16 KB page alignment for Android 15+ devices
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,max-page-size=16384")
 
 # ---------------------------------------------------------------- SDL2 (shared, loaded by SDLActivity)
 set(SDL_SHARED ON CACHE BOOL "" FORCE)
