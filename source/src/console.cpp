@@ -1,6 +1,9 @@
 // console.cpp: the console buffer, its display, and command line control
 
 #include "cube.h"
+#ifdef __ANDROID__
+#include <android/log.h>
+#endif
 
 #define CONSPAD (FONTH/3)
 
@@ -109,6 +112,9 @@ void clientlogf(const char *s, ...)
     { // break into single lines first
         if((p = strchr(l, '\n'))) *p = '\0';
         printf("%s%s\n", ts, l);
+#ifdef __ANDROID__
+        __android_log_print(ANDROID_LOG_INFO, "AssaultCube", "%s", l);
+#endif
         if(clientlogfile)
         {
             clientlogfile->printf("%s%s\n", ts, l);

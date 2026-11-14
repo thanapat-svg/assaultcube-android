@@ -2,6 +2,10 @@
 
 #include "cube.h"
 
+#ifdef __ANDROID__
+extern "C" void ac_cleanexit(); // android_main.cpp
+#endif
+
 void cleanup(char *msg)         // single program exit point;
 {
     if(clientlogfile) clientlogfile->fflush();
@@ -53,6 +57,9 @@ void quit()                     // normal exit
     cleanup(NULL);
     popscontext();
     DELETEP(clientlogfile);
+#ifdef __ANDROID__
+    ac_cleanexit();
+#endif
     exit(EXIT_SUCCESS);
 }
 COMMAND(quit, "");
