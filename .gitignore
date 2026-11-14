@@ -1,0 +1,10 @@
+android/app/jni/deps/
+android/app/src/main/assets/
+android/app/build/
+android/app/.cxx/
+android/build/
+android/.gradle/
+android/local.properties
+out/
+*.o
+*.gch
